@@ -1,0 +1,7 @@
+instance,sense,new_objective,old_objective,outcome,new_exit_code,old_exit_code,new_wall_seconds,old_wall_seconds
+QPLIB_9030.lp,min,526240.0,526240.0,tie,0,0,307.786715,306.023809
+QPLIB_3380.lp,min,,,neither feasible,0,0,300.340002,300.385195
+QPLIB_6941.lp,min,193.0,193.0,tie,0,0,304.234224,304.151109
+chimera_mgw-c16-2031-01.lp,max,2002.0,2001.0,new win,0,0,300.18052,300.064573
+chimera_rfr-01.lp,max,1192.7,1187.9,new win,0,0,300.188292,300.622605
+chimera_selby-c16-02.lp,max,718.6,719.4,new loss,0,0,300.347636,300.272905

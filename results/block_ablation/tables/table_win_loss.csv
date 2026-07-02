@@ -1,0 +1,7 @@
+comparison,win,tie,loss,unsolved_both
+full_block vs baseline,74,211,15,0
+repair_only vs baseline,74,218,8,0
+improve_only vs baseline,13,213,14,60
+smart_only vs old_block,39,236,25,0
+normalized_only vs old_block,23,237,40,0
+full_block vs repair_only,29,247,24,0

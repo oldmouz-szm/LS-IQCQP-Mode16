@@ -1,0 +1,7 @@
+comparison,win,tie,loss,unsolved_both,avg_relative_gap,feasible_gain
+full_block vs baseline,74,211,15,0,0.0006152657991402961,60
+repair_only vs baseline,74,218,8,0,-8.35653965422466e-05,60
+improve_only vs baseline,13,213,14,60,-0.0001192079870879919,0
+smart_only vs old_block,39,236,25,0,-3.1656441654219267,0
+normalized_only vs old_block,23,237,40,0,0.0069803127015044385,0
+full_block vs repair_only,29,247,24,0,-1.3508112044685308,0

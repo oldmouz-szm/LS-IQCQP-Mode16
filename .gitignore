@@ -1,0 +1,25 @@
+# Build products
+**/build/
+*.o
+*.a
+*.so
+
+# Benchmark runtime artifacts
+*.log
+*.out
+*.pid
+nohup*
+results/**/logs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Editor and temporary files
+*.bak
+*.patch
+*~
+.DS_Store
+
+# Duplicate source-data archive; extracted instances remain tracked.
+data/*.rar

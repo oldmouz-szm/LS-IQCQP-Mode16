@@ -1,0 +1,4 @@
+cutoff,instances,new_feasible,old_feasible,wins,ties,losses,new_only_feasible,old_only_feasible,neither_feasible,sense_mismatch,new_nonzero_exit,old_nonzero_exit
+10,221,214,214,26,184,4,0,0,7,0,0,0
+60,221,214,214,17,191,6,0,0,7,0,0,0
+300,221,214,214,17,194,3,0,0,7,0,0,0

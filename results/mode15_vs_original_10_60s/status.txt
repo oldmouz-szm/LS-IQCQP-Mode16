@@ -1,0 +1,17 @@
+state=running
+started_at=2026-06-30T20:59:37+08:00
+mode=15
+cutoff_seconds=60
+parallel_pairs=5
+completed=QPLIB_3587.lp
+completed=QPLIB_5755.lp
+completed=QPLIB_3650.lp
+completed=chimera_selby-c8-onc8-01.lp
+completed=chimera_selby-c16-02.lp
+completed=chimera_k64ising-01.lp
+completed=QPLIB_3693.lp
+completed=QPLIB_3850.lp
+completed=chimera_lga-02.lp
+completed=QPLIB_9048.lp
+finished_at=2026-06-30T21:03:39+08:00
+state=done

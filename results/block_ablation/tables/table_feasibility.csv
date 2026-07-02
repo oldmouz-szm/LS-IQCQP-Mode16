@@ -1,0 +1,8 @@
+mode,feasible_count,total_runs,feasible_rate
+old_block,900,900,1.0000
+smart_only,900,900,1.0000
+improve_only,720,900,0.8000
+baseline,240,300,0.8000
+repair_only,900,900,1.0000
+full_block,900,900,1.0000
+normalized_only,900,900,1.0000

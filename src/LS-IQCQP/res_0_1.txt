@@ -1,0 +1,41 @@
+mix_balance
+without equation
+ best obj min= 187.000000
+block stats:
+  enabled = 1
+  max_size = 3
+  top_cons_num = 10
+  candidate_value_cap = 5
+  enum_cap = 2000
+  candidates_total = 1310000
+  var_candidate_raw_total = 3275000
+  var_candidate_legal_total = 3275000
+  combo_generated_total = 1310000
+  combo_after_check_total = 1310000
+  combo_score_positive_total = 34514
+  selected_total = 31228
+  execute_attempt_total = 31228
+  executed_total = 31228
+  repair_executed_total = 31228
+  improve_executed_total = 0
+  repair_success_total = 12273
+  best_update_total = 0
+  obj_improve_executed_total = 18955
+  obj_worsen_executed_total = 12273
+  violation_improve_executed_total = 31228
+  keep_feasible_executed_total = 0
+  obj_delta_sum = 1.13648e+06
+  violation_delta_sum = -218082
+  rejected_by_check_total = 0
+  zero_shift_rejected_total = 0
+  best_score_seen = -2.14748e+09
+  execute_attempt_total = 31228
+  execute_failed_total = 0
+  fail_empty_total = 0
+  fail_size_mismatch_total = 0
+  fail_duplicate_var_total = 0
+  fail_zero_shift_total = 0
+  fail_illegal_value_total = 0
+  fail_check_var_shift_total = 0
+  fail_consistency_total = 0
+  fail_unknown_total = 0

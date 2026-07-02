@@ -1,0 +1,64 @@
+mix_balance
+without equation
+ best obj min= 260.000000
+block stats:
+  enabled = 1
+  repair_enabled = 1
+  improve_enabled = 1
+  smart_candidate = 1
+  normalized_score = 1
+  seed = 8
+  max_size = 2
+  top_cons_num = 10
+  candidate_value_cap = 5
+  enum_cap = 2000
+  candidates_total = 2993345
+  var_candidate_raw_total = 1314239
+  var_candidate_legal_total = 1314239
+  combo_generated_total = 2993345
+  combo_after_check_total = 2993345
+  combo_score_positive_total = 657081
+  selected_total = 145999
+  execute_attempt_total = 145999
+  executed_total = 145999
+  repair_executed_total = 145999
+  improve_executed_total = 0
+  repair_success_total = 1
+  best_update_total = 0
+  obj_improve_executed_total = 73000
+  obj_worsen_executed_total = 72999
+  violation_improve_executed_total = 73002
+  keep_feasible_executed_total = 0
+  obj_delta_sum = 1.57786e+06
+  violation_delta_sum = -6311
+  rejected_by_check_total = 0
+  zero_shift_rejected_total = 0
+  best_score_seen = -2.14748e+09
+  execute_attempt_total = 145999
+  execute_failed_total = 0
+  fail_empty_total = 0
+  fail_size_mismatch_total = 0
+  fail_duplicate_var_total = 0
+  fail_zero_shift_total = 0
+  fail_illegal_value_total = 0
+  fail_check_var_shift_total = 0
+  fail_consistency_total = 0
+  fail_unknown_total = 0
+ minimize: 
+8000.000000000000000 * i1 + -330.000000000000000 * i2 + -360.000000000000000 * i3 + -370.000000000000000 * i4 + -415.000000000000000 * i5 + -435.000000000000000 * i6
+constraints: 
+e2: 330.000000000000000 * i2 + 360.000000000000000 * i3 + 370.000000000000000 * i4 + 415.000000000000000 * i5 + 435.000000000000000 * i6 <= 8000.000000000000000
+e3: 330.000000000000000 * i2 + 360.000000000000000 * i3 + 370.000000000000000 * i4 + 415.000000000000000 * i5 + 435.000000000000000 * i6 >= 7700.000000000000000
+e4: 1.000000000000000 * i2 + 1.000000000000000 * i3 + 1.000000000000000 * i4 + 1.000000000000000 * i5 + 1.000000000000000 * i6 <= 20.000000000000000
+e5: -1.000000000000000 * i1 * i2 <= -60.000000000000000
+e6: -1.000000000000000 * i1 * i3 <= -30.000000000000000
+e7: -1.000000000000000 * i1 * i4 <= -75.000000000000000
+e8: -1.000000000000000 * i1 * i5 <= -30.000000000000000
+e9: -1.000000000000000 * i1 * i6 <= -100.000000000000000
+
+i1     1.000000000000000
+i2     1.000000000000000
+i3     1.000000000000000
+i4     1.000000000000000
+i5     14.000000000000000
+i6     2.000000000000000

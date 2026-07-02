@@ -1,0 +1,10 @@
+QPLIB_3587.lp
+QPLIB_3650.lp
+chimera_selby-c8-onc8-01.lp
+chimera_selby-c16-02.lp
+QPLIB_5755.lp
+chimera_k64ising-01.lp
+QPLIB_3850.lp
+QPLIB_3693.lp
+chimera_lga-02.lp
+QPLIB_9048.lp

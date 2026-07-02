@@ -1,0 +1,14 @@
+state=running
+started_at=2026-07-01T10:51:57+08:00
+mode=15
+cutoff_seconds=300
+parallel_pairs=6
+pair_execution=concurrent
+completed=chimera_mgw-c16-2031-01.lp
+completed=chimera_selby-c16-02.lp
+completed=QPLIB_3380.lp
+completed=chimera_rfr-01.lp
+completed=QPLIB_6941.lp
+completed=QPLIB_9030.lp
+finished_at=2026-07-01T10:57:05+08:00
+state=done
