@@ -1,0 +1,13 @@
+instance,sense,baseline_obj,mode15_obj,mode16_obj,mode16_vs_baseline,mode16_vs_mode15,pair_attempt,pair_checked,pair_executed,cache_mismatch16
+chimera_k64ising-01.lp,max,12.0,17.3,20.5,win,win,2664,4966137,2069,0
+chimera_k64maxcut-01.lp,max,13.8,14.1,19.4,win,win,3414,4614213,2005,0
+chimera_k64maxcut-02.lp,max,12.1,10.2,17.2,win,win,3217,4490559,2308,0
+chimera_lga-01.lp,max,123.3,131.3,135.3,win,win,1746,5523096,1470,0
+chimera_lga-02.lp,max,123.9,125.2,128.6,win,win,2074,5981993,1539,0
+chimera_mgw-c16-2031-01.lp,max,1959.0,1969.0,1966.0,win,loss,806,6367081,128,0
+chimera_mgw-c16-2031-02.lp,max,1967.0,1981.0,1979.0,win,loss,802,6334866,125,0
+chimera_selby-c16-01.lp,max,711.0,699.0,709.8,loss,win,971,5283901,643,0
+chimera_selby-c16-02.lp,max,696.2,699.0,716.7,win,win,1018,5496530,525,0
+QPLIB_5721.lp,max,7930221.0,7930221.0,8078979.0,win,win,142,134211,14,0
+QPLIB_5725.lp,max,33065571.0,33152235.0,33380887.0,win,win,5966,5901149,2083,0
+QPLIB_5755.lp,max,23692136.0,23733313.0,24041235.0,win,win,6852,5296489,4090,0

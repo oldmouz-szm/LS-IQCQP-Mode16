@@ -186,6 +186,30 @@ int main(int argc,char *argv[]) // pri
                 ls_qp_solver->serial_diversification_time_ratio = 0.85;
                 ls_qp_solver->serial_diversification_kick_cap = 8;
                 ls_qp_solver->qubo_incremental_gain_enabled = true;
+            } else if (mode == 16) {
+                // Phase H-3: Mode 15 + QUBO adaptive 2-flip escape
+                ls_qp_solver->block_adaptive_trigger_enabled = true;
+                ls_qp_solver->block_repair_enabled = true;
+                ls_qp_solver->block_improve_enabled = false;
+                ls_qp_solver->block_smart_candidate_enabled = true;
+                ls_qp_solver->block_normalized_score_enabled = false;
+                ls_qp_solver->block_repair_stagnation_window = 500;
+                ls_qp_solver->block_min_steps_before_enable = 500;
+                ls_qp_solver->block_trigger_interval = 100;
+                ls_qp_solver->block_time_budget_ratio = 0.05;
+                ls_qp_solver->block_disable_repair_after_first_feasible = true;
+                ls_qp_solver->block_prioritized_repair_enabled = true;
+                ls_qp_solver->block_safe_acceptance_enabled = true;
+                ls_qp_solver->block_top_cons_num = 5;
+                ls_qp_solver->block_safe_min_relative_gain = 1e-9;
+                ls_qp_solver->legacy_seed_schedule_enabled = true;
+                ls_qp_solver->strict_incumbent_validation_enabled = false;
+                ls_qp_solver->serial_diversification_enabled = true;
+                ls_qp_solver->broad_escape_pool_enabled = true;
+                ls_qp_solver->serial_diversification_time_ratio = 0.85;
+                ls_qp_solver->serial_diversification_kick_cap = 8;
+                ls_qp_solver->qubo_incremental_gain_enabled = true;
+                ls_qp_solver->qubo_pair_flip_enabled = true;
             }
         }
         

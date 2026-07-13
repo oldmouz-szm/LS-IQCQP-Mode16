@@ -1,0 +1,4 @@
+solver,instances,mode16_win,tie,mode16_loss,solver_errors
+dwave_tabu,42,11,12,19,0
+gurobi,42,15,5,22,0
+neal_sa,42,3,8,31,0

@@ -7,8 +7,10 @@
 # Benchmark runtime artifacts
 *.log
 *.out
+*.err
 *.pid
 nohup*
+tasks.tsv
 results/**/logs/
 
 # Python cache

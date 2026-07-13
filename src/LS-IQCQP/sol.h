@@ -215,6 +215,16 @@ namespace solver
         long long                                       qubo_gain_moves_since_rebuild = 0;
         long long                                       qubo_gain_rebuild_interval = 100000;
         long long                                       qubo_gain_verify_interval = 0;
+        bool                                            qubo_pair_flip_enabled = false;
+        int                                             qubo_pair_flip_edge_scan_cap = 20000;
+        int                                             qubo_pair_flip_bms_cap = 1000;
+        int                                             qubo_pair_flip_trigger_interval = 10;
+        long long                                       qubo_pair_flip_attempt_total = 0;
+        long long                                       qubo_pair_flip_checked_total = 0;
+        long long                                       qubo_pair_flip_executed_total = 0;
+        long long                                       qubo_pair_flip_improved_best_total = 0;
+        Float                                           qubo_pair_flip_best_score_seen = INT32_MIN;
+        double                                          qubo_pair_flip_time_spent = 0.0;
         //var information
         int                                             cons_num_type; // <= 50 : 0      >50 : 1
         int                                             problem_type;
@@ -462,6 +472,9 @@ namespace solver
         void                                            rebuild_qubo_gain_cache();
         void                                            update_qubo_gain_cache_after_flip(int var_pos, Float change_value);
         bool                                            verify_qubo_gain_cache(Float tolerance = 1e-8);
+        Float                                           calculate_qubo_pair_flip_score(int var_idx_1, int var_idx_2, Float qij);
+        void                                            execute_qubo_pair_flip_no_cons(int var_idx_1, int var_idx_2);
+        bool                                            try_qubo_pair_flip_escape_no_cons();
         void                                            insert_var_change_value_sat(int var_idx, all_coeff * a_coeff, Float delta, polynomial_constraint * pcon, int symflag, Float symvalue, bool rand_flag);
         bool                                            insert_var_change_value_sat_bin(int var_idx, all_coeff * a_coeff, Float delta, polynomial_constraint * pcon, Float symvalue, bool rand_flag);
         bool                                            insert_var_change_value_sat_bin_equal(int var_idx, all_coeff * a_coeff, Float delta, polynomial_constraint * pcon, Float symvalue, bool rand_flag);

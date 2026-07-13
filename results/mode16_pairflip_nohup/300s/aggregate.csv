@@ -1,0 +1,5 @@
+subset,instances,mode16_vs_baseline_win,mode16_vs_baseline_tie,mode16_vs_baseline_loss,mode16_vs_mode15_win,mode16_vs_mode15_tie,mode16_vs_mode15_loss,mode16_feasible_or_obj,baseline_feasible_or_obj,mode15_feasible_or_obj,pair_attempt_sum,pair_checked_sum,pair_executed_sum,pair_improved_best_sum,pair_time_spent_sum,cache_mismatch16_sum,mode15_cache_mismatch_sum
+all,221,18,196,7,17,198,6,215,215,215,3967936,5876744549,840283,1130,3022.5135,0,0
+qubo_cache_active,42,18,19,5,15,22,5,42,42,42,3967936,5876744549,840283,1130,3022.5135,0,0
+chimera,19,15,3,1,13,4,2,19,19,19,1039797,2456657424,422264,584,1188.8923,0,0
+chimera_qubo_cache_active,19,15,3,1,13,4,2,19,19,19,1039797,2456657424,422264,584,1188.8923,0,0

@@ -501,6 +501,203 @@ namespace solver
         return valid;
     }
 
+    Float qp_solver::calculate_qubo_pair_flip_score(int var_idx_1, int var_idx_2, Float qij)
+    {
+        if (!qubo_gain_cache_active
+            || var_idx_1 < 0 || var_idx_1 >= (int)qubo_gain_cache.size()
+            || var_idx_2 < 0 || var_idx_2 >= (int)qubo_gain_cache.size())
+        {
+            return (Float)INT32_MIN;
+        }
+        Float gain_1 = qubo_gain_cache[var_idx_1];
+        Float gain_2 = qubo_gain_cache[var_idx_2];
+        if (gain_1 == (Float)INT32_MIN || gain_2 == (Float)INT32_MIN)
+        {
+            return (Float)INT32_MIN;
+        }
+        Float shift_1 = (_cur_assignment[var_idx_1] == 0) ? 1 : -1;
+        Float shift_2 = (_cur_assignment[var_idx_2] == 0) ? 1 : -1;
+        return gain_1 + gain_2 - qij * shift_1 * shift_2;
+    }
+
+    void qp_solver::execute_qubo_pair_flip_no_cons(int var_idx_1, int var_idx_2)
+    {
+        Float old_best = _best_object_value;
+        Float shift_1 = (_cur_assignment[var_idx_1] == 0) ? 1 : -1;
+        Float shift_2 = (_cur_assignment[var_idx_2] == 0) ? 1 : -1;
+
+        _cur_assignment[var_idx_1] += shift_1;
+        update_qubo_gain_cache_after_flip(var_idx_1, shift_1);
+        _cur_assignment[var_idx_2] += shift_2;
+        update_qubo_gain_cache_after_flip(var_idx_2, shift_2);
+
+        if (shift_1 < 0) _vars[var_idx_1].last_pos_step = _steps + 3 + rand() % 10;
+        else _vars[var_idx_1].last_neg_step = _steps + 3 + rand() % 10;
+        if (shift_2 < 0) _vars[var_idx_2].last_pos_step = _steps + 3 + rand() % 10;
+        else _vars[var_idx_2].last_neg_step = _steps + 3 + rand() % 10;
+
+        update_best_solution();
+        qubo_pair_flip_executed_total++;
+        if (_best_object_value < old_best - eb) qubo_pair_flip_improved_best_total++;
+    }
+
+    bool qp_solver::try_qubo_pair_flip_escape_no_cons()
+    {
+        if (!qubo_pair_flip_enabled || !_constraints.empty() || !qubo_gain_cache_active)
+        {
+            return false;
+        }
+        if (qubo_pair_flip_trigger_interval > 1
+            && _steps % qubo_pair_flip_trigger_interval != 0)
+        {
+            return false;
+        }
+        qubo_pair_flip_attempt_total++;
+        double start_time = TimeElapsed();
+
+        auto finish = [&]() {
+            qubo_pair_flip_time_spent += TimeElapsed() - start_time;
+        };
+        auto edge_key = [](int a, int b) -> long long {
+            if (a > b) std::swap(a, b);
+            return (static_cast<long long>(a) << 32)
+                ^ static_cast<unsigned int>(b);
+        };
+        auto edge_first = [](long long key) -> int {
+            return static_cast<int>(key >> 32);
+        };
+        auto edge_second = [](long long key) -> int {
+            return static_cast<int>(key & 0xffffffffLL);
+        };
+        auto exact_qij = [&](int a, int b) -> Float {
+            const vector<int>& scan_terms =
+                (_vars[a].obj_monomials.size() <= _vars[b].obj_monomials.size())
+                ? _vars[a].obj_monomials : _vars[b].obj_monomials;
+            Float qij = 0;
+            for (int mono_pos : scan_terms)
+            {
+                const monomial& mono = _object_monoials[mono_pos];
+                if (!mono.is_multilinear || mono.m_vars.size() != 2) continue;
+                int u = mono.m_vars[0];
+                int v = mono.m_vars[1];
+                if ((u == a && v == b) || (u == b && v == a))
+                {
+                    qij += mono.coeff * _object_weights[mono_pos];
+                }
+            }
+            return qij;
+        };
+
+        size_t quadratic_terms = 0;
+        for (const monomial& mono : _object_monoials)
+        {
+            if (mono.is_multilinear && mono.m_vars.size() == 2) quadratic_terms++;
+        }
+        if (quadratic_terms == 0)
+        {
+            finish();
+            return false;
+        }
+
+        int best_i = -1;
+        int best_j = -1;
+        Float best_score = std::max((Float)0, eb);
+        int best_age = INT32_MAX;
+
+        auto consider_edge = [&](int i, int j, Float qij) {
+            if (i == j || i < 0 || j < 0
+                || i >= (int)_vars.size() || j >= (int)_vars.size()) return;
+            if (!_vars[i].is_bin || !_vars[j].is_bin) return;
+            Float shift_i = (_cur_assignment[i] == 0) ? 1 : -1;
+            Float shift_j = (_cur_assignment[j] == 0) ? 1 : -1;
+            if (!check_var_shift_bool(i, shift_i, false)
+                || !check_var_shift_bool(j, shift_j, false)) return;
+
+            Float score = calculate_qubo_pair_flip_score(i, j, qij);
+            if (score == (Float)INT32_MIN) return;
+            qubo_pair_flip_checked_total++;
+            if (score > qubo_pair_flip_best_score_seen)
+            {
+                qubo_pair_flip_best_score_seen = score;
+            }
+            if (score <= std::max((Float)0, eb)) return;
+
+            int age_i = std::max(_vars[i].last_pos_step, _vars[i].last_neg_step);
+            int age_j = std::max(_vars[j].last_pos_step, _vars[j].last_neg_step);
+            int pair_age = std::min(age_i, age_j);
+            bool better = best_i < 0 || score > best_score + eb;
+            if (!better && std::abs(score - best_score) <= eb)
+            {
+                int a = std::min(i, j);
+                int b = std::max(i, j);
+                int best_a = std::min(best_i, best_j);
+                int best_b = std::max(best_i, best_j);
+                better = pair_age < best_age
+                    || (pair_age == best_age
+                        && (a < best_a || (a == best_a && b < best_b)));
+            }
+            if (better)
+            {
+                best_score = score;
+                best_i = i;
+                best_j = j;
+                best_age = pair_age;
+            }
+        };
+
+        if (quadratic_terms <= (size_t)qubo_pair_flip_edge_scan_cap)
+        {
+            unordered_map<long long, Float> edge_coeff;
+            for (int mono_pos = 0; mono_pos < (int)_object_monoials.size(); ++mono_pos)
+            {
+                const monomial& mono = _object_monoials[mono_pos];
+                if (!mono.is_multilinear || mono.m_vars.size() != 2) continue;
+                int i = mono.m_vars[0];
+                int j = mono.m_vars[1];
+                if (i > j) std::swap(i, j);
+                edge_coeff[edge_key(i, j)] += mono.coeff * _object_weights[mono_pos];
+            }
+            for (const auto& item : edge_coeff)
+            {
+                consider_edge(edge_first(item.first), edge_second(item.first), item.second);
+            }
+        }
+        else
+        {
+            int sample_cap = std::min(qubo_pair_flip_bms_cap, (int)quadratic_terms);
+            unordered_set<long long> sampled_edges;
+            for (int sample = 0; sample < sample_cap; ++sample)
+            {
+                int seen = 0;
+                int target = rand() % quadratic_terms;
+                for (int mono_pos = 0; mono_pos < (int)_object_monoials.size(); ++mono_pos)
+                {
+                    const monomial& mono = _object_monoials[mono_pos];
+                    if (!mono.is_multilinear || mono.m_vars.size() != 2) continue;
+                    if (seen++ != target) continue;
+                    int i = mono.m_vars[0];
+                    int j = mono.m_vars[1];
+                    if (i > j) std::swap(i, j);
+                    long long key = edge_key(i, j);
+                    if (sampled_edges.insert(key).second)
+                    {
+                        consider_edge(i, j, exact_qij(i, j));
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (best_i >= 0 && best_j >= 0)
+        {
+            execute_qubo_pair_flip_no_cons(best_i, best_j);
+            finish();
+            return true;
+        }
+        finish();
+        return false;
+    }
+
     Float qp_solver::calculate_score_no_cons(int var_pos, Float change_value)
     {
         if (qubo_gain_cache_active && var_pos >= 0
@@ -811,6 +1008,7 @@ namespace solver
             select_best_operation_no_cons(var_pos, change_value, score);
             //下面的都得改
             if (score > 0) execute_critical_move_no_cons(var_pos, change_value);
+            else if (try_qubo_pair_flip_escape_no_cons()) {}
             else if (!fps_move())
             {
                 update_weight_no_cons();
@@ -842,6 +1040,20 @@ namespace solver
                           << qubo_gain_cache_neighbor_updates_total << std::endl;
                 std::cerr << "qubo_gain_cache_mismatch_total = "
                           << qubo_gain_cache_mismatch_total << std::endl;
+            }
+            if (qubo_pair_flip_enabled) {
+                std::cerr << "qubo_pair_flip_attempt_total = "
+                          << qubo_pair_flip_attempt_total << std::endl;
+                std::cerr << "qubo_pair_flip_checked_total = "
+                          << qubo_pair_flip_checked_total << std::endl;
+                std::cerr << "qubo_pair_flip_executed_total = "
+                          << qubo_pair_flip_executed_total << std::endl;
+                std::cerr << "qubo_pair_flip_improved_best_total = "
+                          << qubo_pair_flip_improved_best_total << std::endl;
+                std::cerr << "qubo_pair_flip_best_score_seen = "
+                          << qubo_pair_flip_best_score_seen << std::endl;
+                std::cerr << "qubo_pair_flip_time_spent = "
+                          << qubo_pair_flip_time_spent << std::endl;
             }
             // cout << endl << " solution : " << endl;
             // print_best_solution();
